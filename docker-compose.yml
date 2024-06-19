@@ -1,0 +1,74 @@
+services:
+  vote:
+    image: 172.21.0.3:8082/example-voting-app-vote
+    depends_on:
+      redis:
+        condition: service_healthy
+    ports:
+      - "5003:80"
+    networks:
+      - front-tier
+      - back-tier
+
+  result:
+    image: 172.21.0.3:8082/example-voting-app-result
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5002:80"
+    networks:
+      - front-tier
+      - back-tier
+
+  worker:
+    image: 172.21.0.3:8082/example-voting-app-worker
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    networks:
+      - back-tier
+
+  redis:
+    image: redis:alpine
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - back-tier
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    volumes:
+      - "db-data:/var/lib/postgresql/data"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB -h localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - back-tier
+
+  seed:
+    build: ./seed-data
+    profiles: ["seed"]
+    depends_on:
+      vote:
+        condition: service_healthy 
+    networks:
+      - front-tier
+    restart: "no"
+
+volumes:
+  db-data:
+
+networks:
+  front-tier:
+  back-tier:
