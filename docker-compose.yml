@@ -56,7 +56,7 @@ services:
       - back-tier
 
   seed:
-    build: ./seed-data
+    image: example-voting-app-seed-data:last
     profiles: ["seed"]
     depends_on:
       vote:
