@@ -1,7 +1,6 @@
 services:
   vote:
-    image: 172.21.0.3:8082/example-voting-app-vote
-    depends_on:
+    image: 172.21.0.3:8082/example-voting-app-vote:
       redis:
         condition: service_healthy
     ports:
@@ -11,7 +10,7 @@ services:
       - back-tier
 
   result:
-    image: 172.21.0.3:8082/example-voting-app-result
+    image: 172.21.0.3:8082/example-voting-app-result:
     depends_on:
       db:
         condition: service_healthy
@@ -22,7 +21,7 @@ services:
       - back-tier
 
   worker:
-    image: 172.21.0.3:8082/example-voting-app-worker
+    image: 172.21.0.3:8082/example-voting-app-worker:
     depends_on:
       redis:
         condition: service_healthy
