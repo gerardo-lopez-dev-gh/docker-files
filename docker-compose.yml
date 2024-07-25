@@ -1,6 +1,9 @@
+version: '3.8'
+
 services:
   vote:
     image: 172.21.0.3:8082/example-voting-app-vote:last
+    depends_on:
       redis:
         condition: service_healthy
     ports:
