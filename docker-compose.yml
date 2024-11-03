@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   vote:
-    image: 172.21.0.3:8082/example-voting-app-vote:20240925_17687c0
+    image: 172.21.0.3:8082/example-voting-app-vote:20241102_17687c0
     depends_on:
       redis:
         condition: service_healthy
@@ -13,7 +13,7 @@ services:
       - back-tier
 
   result:
-    image: 172.21.0.3:8082/example-voting-app-result:20240925_17687c0
+    image: 172.21.0.3:8082/example-voting-app-result:20241102_17687c0
     depends_on:
       db:
         condition: service_healthy
@@ -24,7 +24,7 @@ services:
       - back-tier
 
   worker:
-    image: 172.21.0.3:8082/example-voting-app-worker:20240925_17687c0
+    image: 172.21.0.3:8082/example-voting-app-worker:20241102_17687c0
     depends_on:
       redis:
         condition: service_healthy
@@ -59,7 +59,7 @@ services:
       - back-tier
 
   seed:
-    image: example-voting-app-seed-data:20240925_17687c0
+    image: example-voting-app-seed-data:20241102_17687c0
     profiles: ["seed"]
     depends_on:
       vote:
